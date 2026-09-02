@@ -24,12 +24,15 @@ const products = productsFromServer.map(product => {
 
 export const App = () => {
   const [selectedUser, setSelectedUser] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const trimmedSearchQuery = searchQuery.trim().toLowerCase();
   const visibleProducts = products.filter(product => {
-    if (selectedUser === 0) {
-      return true;
-    }
+    const matchesUser = selectedUser === 0 || product.user.id === selectedUser;
+    const matchesQuery = product.name
+      .toLowerCase()
+      .includes(trimmedSearchQuery);
 
-    return product.user.id === selectedUser;
+    return matchesUser && matchesQuery;
   });
 
   return (
@@ -70,7 +73,8 @@ export const App = () => {
                   type="text"
                   className="input"
                   placeholder="Search"
-                  value="qwe"
+                  value={searchQuery}
+                  onChange={event => setSearchQuery(event.target.value)}
                 />
 
                 <span className="icon is-left">
@@ -79,11 +83,14 @@ export const App = () => {
 
                 <span className="icon is-right">
                   {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                  <button
-                    data-cy="ClearButton"
-                    type="button"
-                    className="delete"
-                  />
+                  {searchQuery && (
+                    <button
+                      data-cy="ClearButton"
+                      type="button"
+                      className="delete"
+                      onClick={() => setSearchQuery('')}
+                    />
+                  )}
                 </span>
               </p>
             </div>
