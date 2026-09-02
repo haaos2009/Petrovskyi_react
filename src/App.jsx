@@ -109,6 +109,17 @@ export const App = () => {
                 All
               </a>
 
+              {categoriesFromServer.map(category => (
+                <a
+                  key={category.id}
+                  data-cy="Category"
+                  className="button mr-2 my-1 is-info"
+                  href="#/"
+                >
+                  {category.title}
+                </a>
+              ))}
+
               <a
                 data-cy="Category"
                 className="button mr-2 my-1 is-info"
